@@ -77,6 +77,16 @@ return [
             'transport' => 'array',
         ],
 
+        'resend' => [
+            'transport' => 'smtp',
+            'host' => 'smtp.resend.com',
+            'port' => 587,
+            'encryption' => 'tls',
+            'username' => 'resend',
+            'password' => env('RESEND_API_KEY'),
+            'timeout' => null,
+        ],
+
         'failover' => [
             'transport' => 'failover',
             'mailers' => [

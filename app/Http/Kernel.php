@@ -14,6 +14,7 @@ class Kernel extends HttpKernel
      * @var array<int, class-string|string>
      */
     protected $middleware = [
+        \App\Http\Middleware\AllowPrivateNetworkAccess::class,
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
@@ -21,6 +22,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\LogRequests::class,
     ];
 
     /**
@@ -63,5 +65,10 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'organization' => \App\Http\Middleware\EnsureOrganizationContext::class,
+        'subscription' => \App\Http\Middleware\CheckSubscriptionLimit::class,
+        'billing.access' => \App\Http\Middleware\EnsureBillingAccess::class,
+        'credit.gate' => \App\Http\Middleware\CreditGate::class,
+        'dev-auto-auth' => \App\Http\Middleware\DevAutoAuth::class,
     ];
 }

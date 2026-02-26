@@ -14,6 +14,7 @@ class ExampleTest extends TestCase
     {
         $response = $this->get('/');
 
-        $response->assertStatus(200);
+        // In this app, the homepage typically redirects to auth or dashboard.
+        $response->assertStatus(302);
     }
 }

@@ -19,9 +19,13 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    // Allow origins are environment-driven. In local/dev, you can set
+    // CORS_ALLOWED_ORIGINS and/or CORS_ALLOWED_ORIGINS_PATTERNS in .env
+    // to quickly whitelist your frontend (e.g. Figma preview domain).
+    'allowed_origins' => array_filter(array_map('trim', explode(',', env('CORS_ALLOWED_ORIGINS', '')))) ?: ['*'],
 
-    'allowed_origins_patterns' => [],
+    // Patterns allow wildcard matching, e.g. ^https://([a-z0-9-]+\.)*figma\.site$
+    'allowed_origins_patterns' => array_filter(array_map('trim', explode('|', env('CORS_ALLOWED_ORIGINS_PATTERNS', '')))),
 
     'allowed_headers' => ['*'],
 
@@ -29,6 +33,7 @@ return [
 
     'max_age' => 0,
 
-    'supports_credentials' => false,
+    // Enable credentials if your frontend sends cookies (e.g., Sanctum SPA auth)
+    'supports_credentials' => (bool) env('CORS_SUPPORTS_CREDENTIALS', false),
 
 ];

@@ -2,20 +2,44 @@
     "name": "inovector/mixpostapp",
     "type": "project",
     "description": "Standalone application with the Laravel Package of Mixpost Lite pre-installed and configured",
-    "keywords": ["mixpost", "mixpost-lite", "inovector"],
+    "keywords": [
+        "mixpost",
+        "mixpost-lite",
+        "inovector"
+    ],
     "require": {
         "php": "^8.2",
         "guzzlehttp/guzzle": "^7.2",
-        "inovector/mixpost": "^2.2",
-        "inovector/mixpost-auth": "^2.1",
+        "inovector/mixpost": "*",
+        "inovector/mixpost-auth": "*",
         "laravel/framework": "^12.0",
-        "laravel/horizon": "^5.15",
+        "laravel/passport": "^13.4",
+        "laravel/sanctum": "^4.0",
+        "laundryos/browseruse-worker": "*",
+        "laundryos/proxy-management": "*",
+        "laundryos/phantombrowse-core": "*",
+        "velocity/browser-use-laravel": "*",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
-        "league/flysystem-sftp-v3": "^3.0"
+        "league/flysystem-sftp-v3": "^3.0",
+        "laundryos/laravel-billing": "*",
+        "livewire/livewire": "3.6",
+        "spatie/laravel-model-states": "^2.12"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
+        "laundryos/llm-client": "*",
+        "laundryos/knowledge-manager": "*",
+        "laundryos/content-generation": "*",
+        "laundryos/social-watcher": "*",
+        "laundryos/lead-watcher": "*",
+        "velocity/apify-manager": "*",
+        "laundryos/linkedin-orchestrator": "*",
+        "sirdannymunn/lead-outreach": "*",
+        "laundryos/social-engagement": "*",
+        "laundryos/tinker-debug": "*",
+        "laundryos/rebrowser-laravel": "*",
+        "sirdannymunn/batch-job-processor": "*",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^8.1",
         "phpunit/phpunit": "^11.1",
@@ -24,50 +48,130 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
+            "LaundryOS\\ProxyManagement\\": "packages/proxy-management/src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-        "post-autoload-dump": [
-            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
-        ],
-        "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
-            "@php artisan mixpost:publish-assets --force=true",
-            "@php artisan vendor:publish --tag=mixpost-auth-assets --force"
-        ],
-        "post-root-package-install": [
-            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
-        ],
-        "post-create-project-cmd": [
-            "@php artisan key:generate --ansi",
-            "@php artisan mixpost:setup-gitignore",
-            "@php artisan queue:batches-table",
-            "@php artisan mixpost:publish",
-            "@php artisan storage:link"
+            "Tests\\": "tests/",
+            "Scratch\\": "Scratch/"
+        },
+        "exclude-from-classmap": [
+            "tests/Unit/PromptComposerCiBlockTest.php",
+            "tests/Unit/DecisionTraceCollectorTest.php",
+            "tests/Unit/PromptComposerTest.php",
+            "tests/Unit/BusinessSummaryCanonicalizationTest.php",
+            "tests/Unit/PromptComposerContextFixTest.php",
+            "Scratch/test_avatar_library.php",
+            "Scratch/generate_full_avatar_library.php"
         ]
     },
-    "extra": {
-        "laravel": {
-            "dont-discover": []
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": {
+        "mixpost": {
+            "type": "path",
+            "url": "packages/mixpost"
+        },
+        "mixpost-auth": {
+            "type": "path",
+            "url": "packages/mixpost-auth"
+        },
+        "laravel-billing": {
+            "type": "path",
+            "url": "packages/laravel-billing-new"
+        },
+        "tinker-debug": {
+            "type": "path",
+            "url": "packages/tinker-debug"
+        },
+        "social-watcher": {
+            "type": "path",
+            "url": "packages/social-watcher"
+        },
+        "lead-watcher": {
+            "type": "path",
+            "url": "packages/lead-watcher"
+        },
+        "lead-intelligence": {
+            "type": "path",
+            "url": "packages/lead-intelligence"
+        },
+        "lead-scoring": {
+            "type": "path",
+            "url": "packages/lead-scoring"
+        },
+        "lead-discovery": {
+            "type": "path",
+            "url": "packages/lead-discovery"
+        },
+        "linkedin-automation": {
+            "type": "path",
+            "url": "packages/linkedin-automation"
+        },
+        "rebrowser-laravel": {
+            "type": "path",
+            "url": "packages/rebrowser-laravel"
+        },
+        "batch-job-processor": {
+            "type": "path",
+            "url": "packages/batch-job"
+        },
+        "linkedin-orchestrator": {
+            "type": "path",
+            "url": "packages/linkedin-orchestrator"
+        },
+        "lead-outreach": {
+            "type": "path",
+            "url": "packages/lead-outreach-orchestrator"
+        },
+        "social-engagement": {
+            "type": "path",
+            "url": "packages/social-engagement"
+        },
+        "llm-client": {
+            "type": "path",
+            "url": "packages/llm-client"
+        },
+        "knowledge-manager": {
+            "type": "path",
+            "url": "packages/knowledge-manager"
+        },
+        "content-generation": {
+            "type": "path",
+            "url": "packages/content-generation"
+        },
+        "apify-manager": {
+            "type": "path",
+            "url": "packages/apify-manager"
+        },
+        "phantombrowse-core": {
+            "type": "path",
+            "url": "packages/phantombrowse-core"
+        },
+        "browseruse-worker": {
+            "type": "path",
+            "url": "packages/browseruse-worker"
+        },
+        "proxy-management": {
+            "type": "path",
+            "url": "packages/proxy-management"
+        },
+        "browser-use-laravel": {
+            "type": "path",
+            "url": "packages/BrowserUseLaravel"
         }
     },
     "config": {
-        "optimize-autoloader": true,
-        "preferred-install": "dist",
-        "sort-packages": true,
         "allow-plugins": {
-            "pestphp/pest-plugin": true,
             "php-http/discovery": true
+        },
+        "classmap-authoritative": false,
+        "optimize-autoloader": false,
+        "platform": {
+            "php": "8.2.27"
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }

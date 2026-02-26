@@ -1,0 +1,111 @@
+[submodule "packages/tinker-debug"]
+path = packages/tinker-debug
+url = git@github.com:SirDannyMunn/tinker-debug.git
+branch = main
+[submodule "packages/social-watcher"]
+path = packages/social-watcher
+url = git@github.com:SirDannyMunn/social-watcher.git
+branch = main
+[submodule "packages/laravel-billing"]
+path = packages/laravel-billing-new
+url = git@github.com:SirDannyMunn/laravel-billing.git
+branch = main
+[submodule "packages/mixpost"]
+path = packages/mixpost
+url = https://github.com/SirDannyMunn/mixpost-package.git
+branch = main
+[submodule "packages/mixpost-auth"]
+path = packages/mixpost-auth
+url = https://github.com/inovector/mixpost-auth.git
+branch = main
+[submodule "packages/backend-chrome-ext-comms"]
+	path = packages/backend-chrome-ext-comms
+	url = git@github.com:SirDannyMunn/backend-chrome-ext-comms.git
+	branch = main
+[submodule "packages/lead-watcher"]
+	path = packages/lead-watcher
+	url = git@github.com:SirDannyMunn/lead-watcher.git
+	branch = main
+[submodule "packages/BrowserUseLaravel"]
+	path = packages/BrowserUseLaravel
+	url = git@github.com:SirDannyMunn/browser-use-laravel.git
+	branch = main
+[submodule "packages/lead-outreach-orchestrator"]
+	path = packages/lead-outreach-orchestrator
+	url = git@github.com:SirDannyMunn/lead-outreach-orchestrator.git
+	branch = main
+[submodule "packages/social-engagement"]
+	path = packages/social-engagement
+	url = git@github.com:SirDannyMunn/social-engagement.git
+	branch = main
+[submodule "packages/talking-head"]
+	path = packages/talking-head
+	url = git@github.com:SirDannyMunn/talking-head.git
+	branch = main
+[submodule "packages/video-gen"]
+	path = packages/video-gen
+	url = git@github.com:SirDannyMunn/video-gen.git
+	branch = main
+[submodule "packages/batch-job"]
+	path = packages/batch-job
+	url = git@github.com:SirDannyMunn/batch-job-processor.git
+	branch = main
+[submodule "packages/linkedin-orchestrator"]
+	path = packages/linkedin-orchestrator
+	url = git@github.com:SirDannyMunn/velocity-linkedin-orchestrator.git
+	branch = main
+[submodule "packages/oauth"]
+	path = packages/oauth
+	url = https://github.com/sirdannymunn/oauth
+	branch = main
+[submodule "packages/llm-client"]
+	path = packages/llm-client
+	url = git@github.com:SirDannyMunn/llm-client.git
+	branch = main
+[submodule "packages/knowledge-manager"]
+	path = packages/knowledge-manager
+	url = git@github.com:SirDannyMunn/knowledge-manager.git
+	branch = main
+[submodule "packages/content-generation"]
+	path = packages/content-generation
+	url = git@github.com:SirDannyMunn/content-generation.git
+	branch = main
+[submodule "packages/apify-manager"]
+	path = packages/apify-manager
+	url = git@github.com:SirDannyMunn/apify-manager.git
+	branch = main
+[submodule "packages/lead-intelligence"]
+	path = packages/lead-intelligence
+	url = git@github.com:SirDannyMunn/lead-intelligence.git
+	branch = main
+[submodule "packages/lead-scoring"]
+	path = packages/lead-scoring
+	url = git@github.com:SirDannyMunn/lead-scoring.git
+	branch = main
+[submodule "packages/lead-discovery"]
+	path = packages/lead-discovery
+	url = git@github.com:SirDannyMunn/lead-discovery.git
+	branch = main
+[submodule "packages/linkedin-automation"]
+	path = packages/linkedin-automation
+	url = git@github.com:SirDannyMunn/linkedin-automation.git
+	branch = main
+[submodule "packages/phantombrowse-core"]
+	path = packages/phantombrowse-core
+	url = git@github.com:SirDannyMunn/phantombrowse-core.git
+	branch = main
+[submodule "packages/rebrowser-laravel"]
+	path = packages/rebrowser-laravel
+	url = git@github.com:SirDannyMunn/rebrowser-laravel.git
+	branch = main
+[submodule "containers/browseruse"]
+	path = containers/browseruse
+	url = git@github.com:SirDannyMunn/browser-use.git
+	branch = main
+[submodule "packages/browseruse-worker"]
+	path = packages/browseruse-worker
+	url = git@github.com:SirDannyMunn/browseruse-worker.git
+	branch = main
+[submodule "packages/proxy-management"]
+	path = packages/proxy-management
+	url = https://github.com/SirDannyMunn/proxy-management.git

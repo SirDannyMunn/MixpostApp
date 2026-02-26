@@ -15,6 +15,21 @@ class HorizonServiceProvider extends HorizonApplicationServiceProvider
     {
         parent::boot();
 
+        Horizon::auth(function ($request) {
+            $configured = (string) env('HORIZON_PLOI_TOKEN', '');
+            if ($configured !== '') {
+                $provided = $request->bearerToken()
+                    ?? $request->header('X-Horizon-Token')
+                    ?? $request->query('token');
+
+                if (is_string($provided) && hash_equals($configured, $provided)) {
+                    return true;
+                }
+            }
+
+            return app()->environment('local') || Gate::check('viewHorizon', [$request->user()]);
+        });
+
         // Horizon::routeSmsNotificationsTo('15556667777');
         // Horizon::routeMailNotificationsTo('example@example.com');
         // Horizon::routeSlackNotificationsTo('slack-webhook-url', '#channel');

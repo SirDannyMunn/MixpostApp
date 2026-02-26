@@ -1,0 +1,1 @@
+php artisan passport:client --public --name="Velocity Chrome Extension" --redirect_uri="https://agfgfbgfchdcdefiejdifabincihmgha.chromiumapp.org/"

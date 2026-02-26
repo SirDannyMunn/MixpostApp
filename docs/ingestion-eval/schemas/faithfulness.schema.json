@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mixpostapp.local/schemas/faithfulness.schema.json",
+  "title": "Faithfulness Audit Result",
+  "type": "object",
+  "required": ["status", "violations"],
+  "properties": {
+    "status": {"type": "string", "enum": ["pass", "fail", "unknown"]},
+    "score": {"type": "number", "minimum": 0, "maximum": 1},
+    "violations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["claim_index", "type", "rationale"],
+        "properties": {
+          "claim_index": {"type": "integer", "minimum": 0},
+          "type": {"type": "string", "enum": ["unsupported", "contradiction", "overstatement", "semantic_drift"]},
+          "severity": {"type": "string", "enum": ["low", "medium", "high"]},
+          "rationale": {"type": "string"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
+

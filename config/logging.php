@@ -70,6 +70,22 @@ return [
             'days' => 14,
         ],
 
+        
+        'http' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/http.log'),
+            'level' => env('LOG_LEVEL', 'info'),
+            'replace_placeholders' => true,
+            'formatter' => App\Logging\HttpRequestFormatter::class,
+        ],
+
+        'topic_intelligence' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/topic-intelligence.log'),
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 14,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),

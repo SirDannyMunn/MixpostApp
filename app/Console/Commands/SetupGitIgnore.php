@@ -8,7 +8,11 @@ use Illuminate\Support\Str;
 class SetupGitIgnore extends Command
 {
 
-    protected $signature = 'mixpost:setup-gitignore';
+    protected $signature = 'mixpost:gitignore:setup';
+
+    protected $aliases = [
+        'mixpost:setup-gitignore',
+    ];
 
     protected $description = 'Setup the .gitignore';
 

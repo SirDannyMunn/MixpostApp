@@ -1,0 +1,116 @@
+{
+  "projectName": "Laravel Social Content Scheduling Package",
+  "branchName": "feature/social-scheduling-prd-v1",
+  "description": "A headless Laravel package that provides a unified, driver-based scheduling and publishing engine for posting text, images, videos, and slideshows to major social media platforms. The package abstracts platform-specific APIs, media constraints, authentication, and rate limits while remaining queue-first, extensible, and SaaS-ready. We are using this package as a starting point: packages\\mixpost-auth and packages\\mixpost. The env variable names are set as follows # Meta MIXPOST_FACEBOOK_CLIENT_ID= MIXPOST_FACEBOOK_CLIENT_SECRET= # X MIXPOST_TWITTER_CLIENT_ID= MIXPOST_TWITTER_CLIENT_SECRET= # LinkedIn MIXPOST_LINKEDIN_CLIENT_ID= MIXPOST_LINKEDIN_CLIENT_SECRET= # TikTok MIXPOST_TIKTOK_CLIENT_KEY= MIXPOST_TIKTOK_CLIENT_SECRET= # YouTube MIXPOST_YOUTUBE_CLIENT_ID= MIXPOST_YOUTUBE_CLIENT_SECRET= # Pinterest MIXPOST_PINTEREST_CLIENT_ID= MIXPOST_PINTEREST_CLIENT_SECRET= # Telegram MIXPOST_TELEGRAM_BOT_TOKEN=. Use the database tables in this repo which start with mixpost_",
+  "userStories": [
+    {
+      "id": "US-001",
+      "priority": "P0",
+      "description": "As a developer, I want to schedule a post to TikTok so that videos or slideshows are published automatically at a specified time.",
+      "acceptanceCriteria": [
+        "System accepts a scheduled TikTok post payload containing video or slideshow media",
+        "A successful POST request is made to the TikTok publishing API",
+        "TikTok API returns a successful response and a platform post ID",
+        "Post status is marked as published"
+      ]
+    },
+    {
+      "id": "US-002",
+      "priority": "P0",
+      "description": "As a developer, I want to schedule posts with media to X (Twitter) so that text, images, and videos are published automatically.",
+      "acceptanceCriteria": [
+        "System validates text and media against X platform constraints",
+        "A successful POST request is made to the X API",
+        "X API returns a successful response with a tweet ID",
+        "Post status is marked as published"
+      ]
+    },
+    {
+      "id": "US-003",
+      "priority": "P0",
+      "description": "As a developer, I want to schedule posts with media to LinkedIn so that professional content can be published automatically.",
+      "acceptanceCriteria": [
+        "System supports text, image, and video payloads for LinkedIn",
+        "A successful POST request is made to the LinkedIn API",
+        "LinkedIn API returns a successful response with a post ID",
+        "Post status is marked as published"
+      ]
+    },
+    {
+      "id": "US-004",
+      "priority": "P0",
+      "description": "As a developer, I want to schedule images, videos, and carousels to Instagram so that content is published without manual posting.",
+      "acceptanceCriteria": [
+        "System validates Instagram media requirements",
+        "A successful POST request is made to the Instagram Graph API",
+        "Instagram API returns a successful response with a media ID",
+        "Post status is marked as published"
+      ]
+    },
+    {
+      "id": "US-005",
+      "priority": "P0",
+      "description": "As a developer, I want to schedule long-form videos and Shorts to YouTube so that video content is published automatically.",
+      "acceptanceCriteria": [
+        "System supports chunked video uploads for YouTube",
+        "A successful POST request is made to the YouTube Data API",
+        "YouTube API returns a successful response with a video ID",
+        "Post status is marked as published"
+      ]
+    },
+    {
+      "id": "US-006",
+      "priority": "P1",
+      "description": "As a developer, I want to schedule images to Pinterest so that pins are published automatically.",
+      "acceptanceCriteria": [
+        "System validates image dimensions and formats for Pinterest",
+        "A successful POST request is made to the Pinterest API",
+        "Pinterest API returns a successful response with a pin ID",
+        "Post status is marked as published"
+      ]
+    },
+    {
+      "id": "US-007",
+      "priority": "P1",
+      "description": "As a developer, I want to schedule text, images, and videos to Facebook so that posts are published automatically.",
+      "acceptanceCriteria": [
+        "System supports Facebook page and profile posting",
+        "A successful POST request is made to the Facebook Graph API",
+        "Facebook API returns a successful response with a post ID",
+        "Post status is marked as published"
+      ]
+    },
+    {
+      "id": "US-008",
+      "priority": "P1",
+      "description": "As a developer, I want to schedule posts with text, images, and videos to Threads so that content can be cross-posted easily.",
+      "acceptanceCriteria": [
+        "System validates Threads content constraints",
+        "A successful POST request is made to the Threads API",
+        "Threads API returns a successful response with a post ID",
+        "Post status is marked as published"
+      ]
+    },
+    {
+      "id": "US-009",
+      "priority": "P0",
+      "description": "As a developer, I want a unified scheduling API so that I can schedule one piece of content across multiple platforms.",
+      "acceptanceCriteria": [
+        "A single scheduling request fans out to multiple platform drivers",
+        "Each platform executes independently",
+        "Partial failures do not block other platforms",
+        "Statuses are tracked per platform"
+      ]
+    },
+    {
+      "id": "US-010",
+      "priority": "P0",
+      "description": "As a developer, I want platform authentication and token refresh to be handled automatically so that scheduled posts do not fail due to expired tokens.",
+      "acceptanceCriteria": [
+        "OAuth tokens are stored securely",
+        "Expired tokens are refreshed automatically",
+        "Posting succeeds after token refresh without manual intervention"
+      ]
+    }
+  ]
+}
