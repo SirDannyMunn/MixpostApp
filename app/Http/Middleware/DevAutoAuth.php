@@ -17,12 +17,11 @@ class DevAutoAuth
     public function handle(Request $request, Closure $next)
     {
         if (app()->environment('local')) {
-            // In local, authenticate as seeded admin and default org context to a predictable dev org
+            // In local, authenticate as seeded admin and default org context to the seeded admin org
 
             // Target seeded records
-            $adminEmail = 'dannymunn1sdfasdfsadfsad95@gmail.com';
-            $preferredOrgId = '019c4817-1a9c-71fc-998f-9df0c2c9b40c';
-            $fallbackOrgSlug = 'admin-org';
+            $adminEmail = 'admin@example.com';
+            $adminOrgSlug = 'admin-org';
 
             // If not already authenticated, log in seeded admin user
             if (! Auth::check()) {
@@ -39,14 +38,11 @@ class DevAutoAuth
             // Ensure we have the seeded admin org available
             $user = Auth::user();
             if ($user) {
-                $org = Organization::query()
-                    ->where('id', $preferredOrgId)
-                    ->orWhere('slug', $fallbackOrgSlug)
-                    ->first();
+                $org = Organization::where('slug', $adminOrgSlug)->first();
                 if (! $org) {
                     return response()->json([
-                        'message' => 'DevAutoAuth: development organization not found',
-                        'hint' => 'Create organization 019c4817-1a9c-71fc-998f-9df0c2c9b40c or fallback slug admin-org',
+                        'message' => 'DevAutoAuth: seeded organization not found',
+                        'hint' => 'Ensure database seeders created organization with slug admin-org',
                     ], 500);
                 }
 

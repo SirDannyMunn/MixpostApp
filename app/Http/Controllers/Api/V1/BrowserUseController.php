@@ -9,8 +9,6 @@ use Illuminate\Http\Response;
 use LaundryOS\PhantomBrowseCore\Exceptions\ApiException;
 use LaundryOS\PhantomBrowseCore\Services\ApiKeyService;
 use LaundryOS\PhantomBrowseCore\Services\BrowserSessionService;
-use LaundryOS\PhantomBrowseCore\Services\ProfileService;
-use LaundryOS\PhantomBrowseCore\Services\SecretService;
 use LaundryOS\PhantomBrowseCore\Services\SessionService;
 use LaundryOS\PhantomBrowseCore\Services\TaskService;
 use LaundryOS\PhantomBrowseCore\Transformers\ResponseTransformer;
@@ -27,9 +25,7 @@ class BrowserUseController extends Controller
         protected ApiKeyService $apiKeyService,
         protected SessionService $sessionService,
         protected TaskService $taskService,
-        protected SecretService $secretService,
         protected BrowserSessionService $browserSessionService,
-        protected ProfileService $profileService,
         protected ResponseTransformer $transformer,
     ) {}
 
@@ -73,13 +69,7 @@ class BrowserUseController extends Controller
             $apiKey = $this->apiKeyService->resolveLocalServiceKey();
             $dto = $this->sessionService->createSession([
                 'profileId' => $request->input('profileId'),
-                'proxyId' => $request->input('proxyId'),
-                'proxyUrl' => $request->input('proxyUrl'),
                 'proxyCountryCode' => $request->input('proxyCountryCode'),
-                'useDedicatedUserProxy' => (bool) $request->boolean('useDedicatedUserProxy'),
-                'disableProxy' => (bool) $request->boolean('disableProxy'),
-                'organizationId' => (string) ($request->attributes->get('organization')?->id ?? ''),
-                'userId' => (string) ($request->user()?->id ?? ''),
                 'startUrl' => $request->input('startUrl'),
                 'browserScreenWidth' => $request->input('browserScreenWidth') ? (int) $request->input('browserScreenWidth') : null,
                 'browserScreenHeight' => $request->input('browserScreenHeight') ? (int) $request->input('browserScreenHeight') : null,
@@ -163,51 +153,6 @@ class BrowserUseController extends Controller
 
     // ─── Browsers ───
 
-    public function listProfiles(Request $request): JsonResponse|Response
-    {
-        return $this->proxy(function () use ($request) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $result = $this->profileService->listProfiles([
-                'pageSize' => (int) $request->input('pageSize', 50),
-                'pageNumber' => (int) $request->input('pageNumber', 1),
-            ], $apiKey);
-
-            return response()->json($this->transformer->paginated($result));
-        });
-    }
-
-    public function createProfile(Request $request): JsonResponse|Response
-    {
-        $request->validate([
-            'name' => 'nullable|string|max:100',
-            'defaultProxyId' => 'nullable|uuid',
-            'groupsIds' => 'nullable|array',
-            'cookieDomains' => 'nullable|array',
-        ]);
-
-        return $this->proxy(function () use ($request) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $dto = $this->profileService->createProfile([
-                'name' => $request->input('name'),
-                'defaultProxyId' => $request->input('defaultProxyId'),
-                'groupsIds' => $request->input('groupsIds', []),
-                'cookieDomains' => $request->input('cookieDomains', []),
-            ], $apiKey);
-
-            return response()->json(['data' => $this->transformer->profile($dto)], 201);
-        });
-    }
-
-    public function deleteProfile(string $id): JsonResponse|Response
-    {
-        return $this->proxy(function () use ($id) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $this->profileService->deleteProfile($id, $apiKey);
-
-            return response()->json(null, 204);
-        });
-    }
-
     public function listBrowsers(Request $request): JsonResponse|Response
     {
         return $this->proxy(function () use ($request) {
@@ -286,14 +231,6 @@ class BrowserUseController extends Controller
                 'maxSteps' => (int) $request->input('maxSteps', 30),
                 'structuredOutput' => $request->input('structuredOutput'),
                 'sessionId' => $request->input('sessionId'),
-                'proxyId' => $request->input('proxyId'),
-                'proxyUrl' => $request->input('proxyUrl'),
-                'proxyCountryCode' => $request->input('proxyCountryCode'),
-                'useDedicatedUserProxy' => (bool) $request->boolean('useDedicatedUserProxy'),
-                'disableProxy' => (bool) $request->boolean('disableProxy'),
-                'organizationId' => (string) ($request->attributes->get('organization')?->id ?? ''),
-                'userId' => (string) ($request->user()?->id ?? ''),
-                'profileId' => $request->input('profileId'),
                 'metadata' => $request->input('metadata') ?? [],
                 'secrets' => $request->input('secrets'),
                 'allowedDomains' => $request->input('allowedDomains') ?? [],
@@ -309,58 +246,6 @@ class BrowserUseController extends Controller
             ], $apiKey);
 
             return response()->json(['data' => $this->transformer->task($dto)]);
-        });
-    }
-
-    public function createTasksBulk(Request $request): JsonResponse|Response
-    {
-        $request->validate([
-            'sessionId' => 'nullable|uuid',
-            'webhook' => 'nullable|array',
-            'webhook.url' => 'nullable|url',
-            'webhook.authToken' => 'nullable|string',
-            'scheduledAt' => 'prohibited',
-            'tasks' => 'required|array|min:1|max:50',
-            'tasks.*.task' => 'required|string',
-            'tasks.*.order' => 'nullable|integer|min:1',
-            'tasks.*.scheduledAt' => 'prohibited',
-            'tasks.*.llm' => 'nullable|string',
-            'tasks.*.startUrl' => 'nullable|string',
-            'tasks.*.maxSteps' => 'nullable|integer|min:1',
-            'tasks.*.structuredOutput' => 'nullable|string',
-            'tasks.*.metadata' => 'nullable|array',
-            'tasks.*.secrets' => 'nullable|array',
-            'tasks.*.allowedDomains' => 'nullable|array',
-            'tasks.*.highlightElements' => 'nullable|boolean',
-            'tasks.*.flashMode' => 'nullable|boolean',
-            'tasks.*.thinking' => 'nullable|boolean',
-            'tasks.*.vision' => 'nullable|boolean',
-            'tasks.*.systemPromptExtension' => 'nullable|string',
-            'tasks.*.judge' => 'nullable|boolean',
-            'tasks.*.judgeGroundTruth' => 'nullable|string',
-            'tasks.*.judgeLlm' => 'nullable|string',
-            'tasks.*.skillIds' => 'nullable|array',
-        ]);
-
-        return $this->proxy(function () use ($request) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $payload = $request->only([
-                'sessionId',
-                'webhook',
-                'tasks',
-            ]);
-
-            $result = $this->taskService->createTasksBulk($payload, $apiKey);
-
-            return response()->json([
-                'batchId' => $result['batchId'],
-                'sessionId' => $result['sessionId'],
-                'submittedCount' => $result['submittedCount'],
-                'data' => array_map(
-                    fn($dto) => $this->transformer->task($dto),
-                    $result['tasks']
-                ),
-            ], 202);
         });
     }
 
@@ -393,87 +278,6 @@ class BrowserUseController extends Controller
             $payload = json_encode($logs, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
             return response($payload ?: '[]', 200)->header('Content-Type', 'text/plain');
-        });
-    }
-
-    // ─── Secrets ───
-
-    public function listSecrets(Request $request): JsonResponse|Response
-    {
-        return $this->proxy(function () use ($request) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $result = $this->secretService->listSecrets([
-                'pageSize' => (int) $request->input('pageSize', 25),
-                'pageNumber' => (int) $request->input('pageNumber', 1),
-                'profileId' => $request->input('profileId'),
-                'key' => $request->input('key'),
-            ], $apiKey);
-
-            return response()->json($this->transformer->paginated($result));
-        });
-    }
-
-    public function createSecret(Request $request): JsonResponse|Response
-    {
-        $request->validate([
-            'profileId' => 'nullable|uuid',
-            'key' => 'required|string|max:120',
-            'value' => 'required|string',
-            'description' => 'nullable|string|max:255',
-        ]);
-
-        return $this->proxy(function () use ($request) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $dto = $this->secretService->createSecret([
-                'profileId' => $request->input('profileId'),
-                'key' => $request->input('key'),
-                'value' => $request->input('value'),
-                'description' => $request->input('description'),
-            ], $apiKey);
-
-            return response()->json(['data' => $this->transformer->secret($dto)], 201);
-        });
-    }
-
-    public function getSecret(string $id): JsonResponse|Response
-    {
-        return $this->proxy(function () use ($id) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $dto = $this->secretService->getSecret($id, $apiKey);
-
-            return response()->json(['data' => $this->transformer->secret($dto)]);
-        });
-    }
-
-    public function updateSecret(Request $request, string $id): JsonResponse|Response
-    {
-        $request->validate([
-            'profileId' => 'nullable|uuid',
-            'key' => 'nullable|string|max:120',
-            'value' => 'nullable|string',
-            'description' => 'nullable|string|max:255',
-        ]);
-
-        return $this->proxy(function () use ($request, $id) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $dto = $this->secretService->updateSecret($id, array_filter([
-                'profileId' => $request->input('profileId'),
-                'key' => $request->input('key'),
-                'value' => $request->input('value'),
-                'description' => $request->input('description'),
-            ], fn ($value) => $value !== null), $apiKey);
-
-            return response()->json(['data' => $this->transformer->secret($dto)]);
-        });
-    }
-
-    public function deleteSecret(string $id): JsonResponse|Response
-    {
-        return $this->proxy(function () use ($id) {
-            $apiKey = $this->apiKeyService->resolveLocalServiceKey();
-            $this->secretService->deleteSecret($id, $apiKey);
-
-            return response()->json(null, 204);
         });
     }
 }

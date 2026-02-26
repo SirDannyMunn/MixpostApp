@@ -102,10 +102,3 @@ branch = main
 	path = containers/browseruse
 	url = git@github.com:SirDannyMunn/browser-use.git
 	branch = main
-[submodule "packages/browseruse-worker"]
-	path = packages/browseruse-worker
-	url = git@github.com:SirDannyMunn/browseruse-worker.git
-	branch = main
-[submodule "packages/proxy-management"]
-	path = packages/proxy-management
-	url = https://github.com/SirDannyMunn/proxy-management.git

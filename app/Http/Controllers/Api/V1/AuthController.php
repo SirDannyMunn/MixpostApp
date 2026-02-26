@@ -15,45 +15,6 @@ use Illuminate\Support\Str;
 
 class AuthController extends Controller
 {
-    private function ensureUserHasOrganization(User $user): void
-    {
-        if ($user->organizations()->exists()) {
-            return;
-        }
-
-        DB::transaction(function () use ($user) {
-            if ($user->organizations()->exists()) {
-                return;
-            }
-
-            $organization = Organization::create([
-                'name' => $user->name . "'s Workspace",
-                'slug' => Str::slug($user->name . '-workspace-' . Str::random(6)),
-                'subscription_tier' => 'free',
-                'subscription_status' => 'trial',
-                'trial_ends_at' => now()->addDays(14),
-            ]);
-
-            OrganizationMember::firstOrCreate(
-                [
-                    'organization_id' => $organization->id,
-                    'user_id' => $user->id,
-                ],
-                [
-                    'role' => 'owner',
-                    'joined_at' => now(),
-                ]
-            );
-
-            ActivityLog::create([
-                'organization_id' => $organization->id,
-                'user_id' => $user->id,
-                'action' => 'user.organization.auto_provisioned',
-                'description' => 'Auto-provisioned default organization for user',
-            ]);
-        });
-    }
-
     public function register(Request $request)
     {
         $data = $request->validate([
@@ -118,7 +79,6 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = Auth::user();
-        $this->ensureUserHasOrganization($user);
         $token = $user->createToken('auth-token')->plainTextToken;
 
         $organizations = $user->organizations()
@@ -140,40 +100,8 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
-        /** @var User $user */
-        $user = $request->user();
-        $this->ensureUserHasOrganization($user);
-
-        $user = $request->user()->load([
-            'organizations' => function ($q) {
-                $q->select('organizations.*', 'organization_members.role');
-            },
-        ]);
-
-        $wanted = $request->header('X-Organization-Id') ?: $request->query('organization_id');
-        $currentOrganization = null;
-
-        if ($wanted) {
-            $candidate = Organization::query()
-                ->where('id', $wanted)
-                ->orWhere('slug', $wanted)
-                ->first();
-            if ($candidate && $user->isMemberOf($candidate)) {
-                $currentOrganization = $candidate;
-            }
-        }
-
-        if (! $currentOrganization && $user->organizations->count() === 1) {
-            $currentOrganization = $user->organizations->first();
-        }
-
-        if (! $currentOrganization && $user->organizations->count() > 1) {
-            $currentOrganization = $user->organizations->first();
-        }
-
-        $payload = $user->toArray();
-        $payload['current_organization'] = $currentOrganization;
-
-        return response()->json($payload);
+        $user = $request->user()->load(['organizations']);
+        return response()->json($user);
     }
 }
+

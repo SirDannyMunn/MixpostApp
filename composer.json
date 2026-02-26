@@ -15,16 +15,12 @@
         "laravel/framework": "^12.0",
         "laravel/passport": "^13.4",
         "laravel/sanctum": "^4.0",
-        "laundryos/browseruse-worker": "*",
-        "laundryos/proxy-management": "*",
         "laundryos/phantombrowse-core": "*",
-        "velocity/browser-use-laravel": "*",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
         "league/flysystem-sftp-v3": "^3.0",
         "laundryos/laravel-billing": "*",
-        "livewire/livewire": "3.6",
-        "spatie/laravel-model-states": "^2.12"
+        "livewire/livewire": "3.6"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -48,7 +44,6 @@
     "autoload": {
         "psr-4": {
             "App\\": "app/",
-            "LaundryOS\\ProxyManagement\\": "packages/proxy-management/src/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         }
@@ -150,18 +145,6 @@
         "phantombrowse-core": {
             "type": "path",
             "url": "packages/phantombrowse-core"
-        },
-        "browseruse-worker": {
-            "type": "path",
-            "url": "packages/browseruse-worker"
-        },
-        "proxy-management": {
-            "type": "path",
-            "url": "packages/proxy-management"
-        },
-        "browser-use-laravel": {
-            "type": "path",
-            "url": "packages/BrowserUseLaravel"
         }
     },
     "config": {

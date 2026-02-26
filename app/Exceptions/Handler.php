@@ -4,7 +4,6 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
-use LaundryOS\PhantomBrowseCore\Exceptions\ApiException;
 use Vendor\LaravelBilling\Exceptions\InsufficientCreditsException;
 
 class Handler extends ExceptionHandler
@@ -51,13 +50,6 @@ class Handler extends ExceptionHandler
                 'credits_available' => $e->available,
                 'upgrade_url' => '/billing/credits',
             ], 402);
-        });
-
-        $this->renderable(function (ApiException $e) {
-            return response()->json([
-                'message' => $e->getMessage(),
-                'detail' => $e->detail(),
-            ], $e->status() ?: 500);
         });
 
         $this->reportable(function (Throwable $e) {

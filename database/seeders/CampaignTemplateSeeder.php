@@ -204,6 +204,58 @@ class CampaignTemplateSeeder extends Seeder
                     ],
                 ],
             ],
+            [
+                'name' => 'LinkedIn Integration Smoke Test (Non-Mutating)',
+                'description' => 'Non-mutating integration template for end-to-end validation of Laravel queue + Python worker + BrowserUse. Steps: check session, open own profile and scroll, open feed and scroll 10 posts.',
+                'category' => 'custom',
+                'icon' => 'TestTube',
+                'color' => 'slate',
+                'is_system' => true,
+                'is_public' => true,
+                'default_settings' => [
+                    'non_mutating_test_mode' => true,
+                    'daily_connections_limit' => 100,
+                    'dailyLimit' => 100,
+                    'minDelay' => 5,
+                    'maxDelay' => 15,
+                    'sendWindowStart' => '00:00',
+                    'sendWindowEnd' => '23:59',
+                    'timezone' => 'UTC',
+                    'activeDays' => ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+                    'skipHolidays' => false,
+                ],
+                'steps' => [
+                    [
+                        'type' => 'linkedin_check_session',
+                        'action_type' => 'check_session',
+                        'config' => [
+                            'non_mutating' => true,
+                        ],
+                        'delay_days' => 0,
+                        'delay_hours' => 0,
+                    ],
+                    [
+                        'type' => 'linkedin_view_profile',
+                        'action_type' => 'view_profile',
+                        'config' => [
+                            'profile_url' => 'https://www.linkedin.com/in/me/',
+                            'non_mutating' => true,
+                        ],
+                        'delay_days' => 0,
+                        'delay_hours' => 0,
+                    ],
+                    [
+                        'type' => 'linkedin_search_leads',
+                        'action_type' => 'browse_feed',
+                        'config' => [
+                            'posts_to_scroll' => 10,
+                            'non_mutating' => true,
+                        ],
+                        'delay_days' => 0,
+                        'delay_hours' => 0,
+                    ],
+                ],
+            ],
         ];
 
         foreach ($templates as $templateData) {

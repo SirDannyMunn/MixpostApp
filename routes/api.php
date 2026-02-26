@@ -337,6 +337,13 @@ Route::prefix('v1')->middleware(['auth:sanctum,api', 'organization'])->group(fun
         Route::post('/profiles', [\App\Http\Controllers\Api\V1\BrowserUseController::class, 'createProfile']);
         Route::delete('/profiles/{id}', [\App\Http\Controllers\Api\V1\BrowserUseController::class, 'deleteProfile']);
 
+        // API keys (for external/public Browser Use API access)
+        Route::middleware([\LaundryOS\PhantomBrowseCore\Http\Middleware\UseLocalApiKeyContextMiddleware::class])->group(function () {
+            Route::get('/api-keys', [\LaundryOS\PhantomBrowseCore\Http\Controllers\ApiKeysController::class, 'index']);
+            Route::post('/api-keys', [\LaundryOS\PhantomBrowseCore\Http\Controllers\ApiKeysController::class, 'store']);
+            Route::delete('/api-keys/{apiKeyId}', [\LaundryOS\PhantomBrowseCore\Http\Controllers\ApiKeysController::class, 'destroy']);
+        });
+
         // Secrets
         Route::get('/secrets', [\App\Http\Controllers\Api\V1\BrowserUseController::class, 'listSecrets']);
         Route::post('/secrets', [\App\Http\Controllers\Api\V1\BrowserUseController::class, 'createSecret']);
